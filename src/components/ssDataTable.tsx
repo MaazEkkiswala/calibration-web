@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   ColumnDef,
@@ -11,11 +11,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { isEmpty } from 'lodash'
-import * as React from 'react'
+} from "@tanstack/react-table";
+import { isEmpty } from "lodash";
+import * as React from "react";
 
-import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -23,9 +22,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import AppUtils from '@/helper/appUtils'
-import { Skeleton } from './ui/skeleton'
+} from "@/components/ui/table";
+import AppUtils from "@/helper/appUtils";
+import { Skeleton } from "./ui/skeleton";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function DataTable({
   data,
@@ -37,37 +45,39 @@ export default function DataTable({
   pageIndex = 0,
   lastPageIndex = null,
   pageLimit = 10,
-  onPageChange = () => { },
+  onPageChange = () => {},
   disablePagination = false,
-  tableColumnVisibility = {}
+  tableColumnVisibility = {},
 }: {
-  data: any[],
-  isLoading?: boolean,
-  columns: ColumnDef<any>[],
-  headerRightChild?: React.ReactNode,
-  headerLeftChild?: React.ReactNode | null,
-  manualPagination?: boolean,
-  pageIndex?: number,
-  lastPageIndex?: number | null,
-  pageLimit?: number,
-  isHideColumnSelection?: boolean,
-  onPageChange?: Function
-  disablePagination?: boolean,
-  tableColumnVisibility?: any
+  data: any[];
+  isLoading?: boolean;
+  columns: ColumnDef<any>[];
+  headerRightChild?: React.ReactNode;
+  headerLeftChild?: React.ReactNode | null;
+  manualPagination?: boolean;
+  pageIndex?: number;
+  lastPageIndex?: number | null;
+  pageLimit?: number;
+  isHideColumnSelection?: boolean;
+  onPageChange?: Function;
+  disablePagination?: boolean;
+  tableColumnVisibility?: any;
 }) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(tableColumnVisibility)
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>(tableColumnVisibility);
+  const [rowSelection, setRowSelection] = React.useState({});
 
-  const paginationOptions = disablePagination ? {} : {
-    initialState: { pagination: { pageSize: pageLimit } },
-    manualPagination: manualPagination,
-    getPaginationRowModel: getPaginationRowModel(),
-  }
+  const paginationOptions = disablePagination
+    ? {}
+    : {
+        initialState: { pagination: { pageSize: pageLimit } },
+        manualPagination: manualPagination,
+        getPaginationRowModel: getPaginationRowModel(),
+      };
 
   const table = useReactTable({
     data,
@@ -95,20 +105,16 @@ export default function DataTable({
   }, [tableColumnVisibility]);
 
   return (
-    <div className='w-full'>
-      <div className='flex items-center justify-between py-4'>
-        <div className='flex flex-row items-center space-x-4'>
-          {
-            headerLeftChild
-              ? <>{headerLeftChild}</>
-              : null
-          }
+    <div className="w-full">
+      <div className="flex items-center justify-between py-4">
+        <div className="flex flex-row items-center space-x-4">
+          {headerLeftChild ? <>{headerLeftChild}</> : null}
         </div>
-        <div className='flex flex-row items-center space-x-4'>
+        <div className="flex flex-row items-center space-x-4">
           {headerRightChild}
         </div>
       </div>
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -119,11 +125,11 @@ export default function DataTable({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -133,7 +139,7 @@ export default function DataTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -147,104 +153,126 @@ export default function DataTable({
               ))
             ) : (
               <>
-                {
-                  isLoading
-                    ? <>
-                      <TableRow>
+                {isLoading ? (
+                  <>
+                    {[...Array(3)].map((_, i) => (
+                      <TableRow key={i}>
                         <TableCell
                           colSpan={columns.length}
-                          className='h-16 text-center'
+                          className="h-16 text-center"
                         >
-                          <Skeleton className='w-full h-full' />
+                          <Skeleton className="w-full h-full" />
                         </TableCell>
                       </TableRow>
-                      <TableRow>
-                        <TableCell
-                          colSpan={columns.length}
-                          className='h-16 text-center'
-                        >
-                          <Skeleton className='w-full h-full' />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell
-                          colSpan={columns.length}
-                          className='h-16 text-center'
-                        >
-                          <Skeleton className='w-full h-full' />
-                        </TableCell>
-                      </TableRow>
-                    </>
-                    : <TableRow>
-                      <TableCell
-                        colSpan={columns.length}
-                        className='h-16 text-center'
-                      >
-                        No records.
-                      </TableCell>
-                    </TableRow>
-                }
+                    ))}
+                  </>
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-16 text-center"
+                    >
+                      No records.
+                    </TableCell>
+                  </TableRow>
+                )}
               </>
             )}
           </TableBody>
         </Table>
       </div>
-      <div className={AppUtils.classNames(
-        'items-center justify-end space-x-2 py-4',
-        disablePagination ? 'hidden' : 'flex'
-      )}>
-        {
-          manualPagination
-            ? <>
-              <div className='flex-1 text-sm text-muted-foreground'>
-                {(pageIndex)} of{' '}
-                {lastPageIndex} row(s) selected.
-              </div>
-              <div className='space-x-2'>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => onPageChange(pageIndex - 1)}
-                  disabled={pageIndex === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => onPageChange(pageIndex + 1)}
-                  disabled={pageIndex === lastPageIndex}
-                >
-                  Next
-                </Button>
-              </div>
-            </>
-            : <>
-              <div className='flex-1 text-sm text-muted-foreground'>
-                {table.getFilteredSelectedRowModel().rows.length} of{' '}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className='space-x-2'>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
-            </>
-        }
-      </div>
+
+      {/* Pagination */}
+      {!disablePagination && (
+        <div className="flex items-center w-full justify-between py-4">
+          {/* Left side  total records*/}
+          <div className="text-sm text-muted-foreground">
+            {manualPagination ? (
+              <>
+                Showing {(pageIndex - 1) * pageLimit + 1}–
+                {Math.min(pageIndex * pageLimit, data.length)} of {data.length}{" "}
+                records
+              </>
+            ) : (
+              <>
+                Showing {table.getState().pagination.pageIndex * pageLimit + 1}–
+                {Math.min(
+                  (table.getState().pagination.pageIndex + 1) * pageLimit,
+                  table.getFilteredRowModel().rows.length
+                )}{" "}
+                of {table.getFilteredRowModel().rows.length} records
+              </>
+            )}
+          </div>
+
+          {/* Right side - pagination */}
+          <div>
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={
+                      manualPagination
+                        ? () => onPageChange(pageIndex - 1)
+                        : () => table.previousPage()
+                    }
+                    className={
+                      (
+                        manualPagination
+                          ? pageIndex === 1
+                          : !table.getCanPreviousPage()
+                      )
+                        ? "pointer-events-none opacity-50"
+                        : ""
+                    }
+                  />
+                </PaginationItem>
+
+                {(manualPagination
+                  ? Array.from({ length: lastPageIndex ?? 0 })
+                  : Array.from({ length: table.getPageCount() })
+                ).map((_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      isActive={
+                        manualPagination
+                          ? pageIndex === i + 1
+                          : table.getState().pagination.pageIndex === i
+                      }
+                      onClick={
+                        manualPagination
+                          ? () => onPageChange(i + 1)
+                          : () => table.setPageIndex(i)
+                      }
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={
+                      manualPagination
+                        ? () => onPageChange(pageIndex + 1)
+                        : () => table.nextPage()
+                    }
+                    className={
+                      (
+                        manualPagination
+                          ? pageIndex === lastPageIndex
+                          : !table.getCanNextPage()
+                      )
+                        ? "pointer-events-none opacity-50"
+                        : ""
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

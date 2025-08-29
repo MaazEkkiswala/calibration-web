@@ -1,4 +1,4 @@
-interface IPaginationState {
+export default interface IPaginationState {
   sortBy: null | any;
   isReload: boolean;
   offset: number;

@@ -1,4 +1,5 @@
-import { first, upperCase } from "lodash";
+import ILabelValue from "@/lib/appInterface/iLabelValue";
+import { first, get, map, upperCase } from "lodash";
 
 export default class AppUtils {
   static classNames = (...classes: string[]) => {
@@ -11,6 +12,26 @@ export default class AppUtils {
 
   static encodeStorageKey(storageKey: string): string {
     return encodeURIComponent(storageKey);
+  }
+
+  static formatString(stringToFormat: string, ...args: any[]) {
+    return stringToFormat.replace(
+      /{(\d+)}/g,
+      (match: any, index: number) => args[index]
+    );
+  }
+
+  static convertObjectsToLabelValue(
+    objects: any[],
+    label: string,
+    value: string
+  ) {
+    const labelValues: ILabelValue[] = map(objects, (obj) => ({
+      label: get(obj, label),
+      value: get(obj, value),
+    })) as any[];
+
+    return labelValues;
   }
 
   static getDisplayURL(storageKey: string): string {
