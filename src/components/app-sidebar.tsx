@@ -59,7 +59,10 @@ const menuItems: MenuItem[] = [
     url: "/home",
     icon: IconHome,
     isActive: true,
-    items: [{ title: "Dashboard", url: "/dashboard" }],
+    items: [
+      { title: "Dashboard", url: "/dashboard" },
+      { title: "Masters", url: "/master" },
+    ],
   },
 
   {
