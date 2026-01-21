@@ -1,3 +1,4 @@
+"use client";
 import SsFormInput from "@/components/form/ssFormInput";
 import SsInputPasswordField from "@/components/form/ssFormPasswordInput";
 import { Button } from "@/components/ui/button";
@@ -87,12 +88,11 @@ export default function Login() {
                 />
 
                 <SsInputPasswordField
-                  type="password"
                   name="password"
                   label="Password"
+                  type="password"
                   placeholder="Password"
                   control={form.control}
-                  maxLength={16}
                 />
 
                 <div className="flex py-4 flex-row-reverse justify-between items-center">

@@ -230,44 +230,40 @@ export default function Users() {
     });
     return [
       {
-        accessorKey: "fullName",
-        ...renderSortableHeader("Name", "fullName"),
+        accessorKey: "name",
+        ...renderSortableHeader("Name", "name"),
         cell: ({ row: { original } }) => (
           <div className="flex flex-row space-x-3 items-center">
-            <SsAvatar
-              alt="UserImage"
-              fallbackLabel={original.fullName?.slice(0, 2).toUpperCase()}
-            />
             <span
               className="text-sm font-robot text-blue-500 underline cursor-pointer"
-              onClick={() => router.push(`/users/detail/${original.id}`)}
+              onClick={() => router.push(`/master/detail/${original.id}`)}
             >
-              {original.fullName}
+              {original.name}
             </span>
           </div>
         ),
       },
       {
-        accessorKey: "emailAddress",
-        ...renderSortableHeader("Email Address", "emailAddress"),
+        accessorKey: "description",
+        ...renderSortableHeader("Description", "description"),
         cell: ({ row: { original } }) => (
           <Label className="text-sm font-robot text-gray-700">
-            {original.emailAddress || "No Email"}
+            {original.description || "No Description"}
           </Label>
         ),
       },
       {
-        accessorKey: "contactNumber",
-        ...renderSortableHeader("Contact Number", "contactNumber"),
+        accessorKey: "certificateNo",
+        ...renderSortableHeader("Certificate Number", "certificateNo"),
         cell: ({ row: { original } }) => (
           <Label className="text-sm font-robot text-gray-700">
-            {original.contactNumber}
+            {original.certificateNo}
           </Label>
         ),
       },
       {
-        accessorKey: "createdAt",
-        ...renderSortableHeader("Created At", "createdAt"),
+        accessorKey: "expiryDate",
+        ...renderSortableHeader("Expiry Date", "expiryDate"),
         cell: ({ row: { original } }) => (
           <Label className="text-sm font-robot">
             {DateUtils.formatDate(original.createdAt)}
@@ -296,7 +292,7 @@ export default function Users() {
           <div className="flex flex-row justify-center items-center space-x-2">
             <SsIconButton
               icon={<IconPencil className="text-violet-700" size={18} />}
-              onClick={() => router.push(`/users/${original.id}`)}
+              onClick={() => router.push(`/master/${original.id}`)}
             />
             <SsIconButton
               icon={<IconTrash className="text-red-700" size={18} />}
@@ -311,34 +307,29 @@ export default function Users() {
   const columns = getColumns(["emailAddress", "createdAt"]);
 
   return (
-    <div className="flex flex-col px-5 py-4 w-full">
-      <Label className="text-base text-xl font-robot text-gray-700">
-        Users
-      </Label>
-      <Card className="mt-4">
-        <CardContent className="h-full overflow-y-scroll">
-          <DataTable
-            isLoading={false}
-            data={users}
-            columns={columns}
-            pageLimit={10}
-            pageIndex={1}
-            lastPageIndex={1}
-            manualPagination={false}
-            headerLeftChild={<Input placeholder="Search" onChange={() => {}} />}
-            headerRightChild={
-              <Button
-                onClick={() => router.push("/users/new")}
-                variant="outline"
-                className=" bg-violet-400 text-white flex flex-row justify-center items-center space-x-3"
-              >
-                <IconPlus size={18} />
-                <span>Create User</span>
-              </Button>
-            }
-          />
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="mt-4">
+      <CardContent className="h-full overflow-y-scroll">
+        <DataTable
+          isLoading={false}
+          data={users}
+          columns={columns}
+          pageLimit={10}
+          pageIndex={1}
+          lastPageIndex={1}
+          manualPagination={false}
+          headerLeftChild={<Input placeholder="Search" onChange={() => {}} />}
+          headerRightChild={
+            <Button
+              onClick={() => router.push("/users/new")}
+              variant="outline"
+              className=" bg-violet-400 text-white flex flex-row justify-center items-center space-x-3"
+            >
+              <IconPlus size={18} />
+              <span>Create User</span>
+            </Button>
+          }
+        />
+      </CardContent>
+    </Card>
   );
 }
